@@ -20,6 +20,7 @@ class HomePageController {
     load = Command0(_loadTransactions);
     searchTransactionsByDate = Command2(_searchTransactionsByDate);
     saveTransaction = Command1(_saveTransaction);
+    editTransactionCommand = Command1(_editTransaction);
     undoDelectedTransaction = Command1(_undoDelectedTransaction);
     deleteTransaction = Command1(_deleteTransaction);
     //loadSample = Command0<void, void>(_resetToSample);
@@ -60,6 +61,7 @@ class HomePageController {
   // commands
   late final Command0<List<TransactionEntity>, Failure> load;
   late final Command1<void, Failure, TransactionEntity> saveTransaction;
+  late final Command1<void, Failure, TransactionEntity> editTransactionCommand;
   late final Command1<void, Failure, TransactionEntity> undoDelectedTransaction;
   late final Command1<void, Failure, String> deleteTransaction;
   late final Command2<List<TransactionEntity>, Failure, DateTime, DateTime>
@@ -144,6 +146,26 @@ class HomePageController {
 
     if (result.isSuccess) {
       _transactions.value = [..._transactions.value, transaction];
+    }
+
+    return result;
+  }
+
+  // Edita transação existente e atualiza o signal
+  Future<Result<void, Failure>> _editTransaction(
+    TransactionEntity transaction,
+  ) async {
+    final result = await _transactionsUseCases.editTransaction.call((
+      transaction: transaction,
+    ));
+
+    if (result.isSuccess) {
+      final list = [..._transactions.value];
+      final index = list.indexWhere((e) => e.id == transaction.id);
+      if (index != -1) {
+        list[index] = transaction;
+        _transactions.value = list;
+      }
     }
 
     return result;

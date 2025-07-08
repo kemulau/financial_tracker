@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:financial_tracker/common/errors/errors_classes.dart';
 import 'package:financial_tracker/common/errors/errors_messagens.dart';
@@ -46,13 +45,6 @@ class TransactionFakeRepository {
   Future<void> addData(String transactionJson) async {
     await Future.delayed(const Duration(seconds: 2));
 
-    // Simula uma falha
-    if (Random().nextBool()) {
-      Random().nextBool()
-          ? throw APIFailure(MessagesError.apiError)
-          : throw InvalidData(MessagesError.recordInvalidFormat);
-    }
-
     if (transactionJson.isEmpty) {
       throw InvalidData(MessagesError.recordInvalidFormat);
     }
@@ -79,6 +71,24 @@ class TransactionFakeRepository {
     }
 
     return jsonEncode(filteredTransactions.map((e) => e.toMap()).toList());
+  }
+
+  Future<void> updateData(String transactionJson) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+
+    if (transactionJson.isEmpty) {
+      throw InvalidData(MessagesError.recordInvalidFormat);
+    }
+
+    final updated = TransactionEntity.fromMap(jsonDecode(transactionJson));
+    final index = transactions.indexWhere((t) => t.id == updated.id);
+
+    if (index == -1) {
+      throw RecordNotFound(MessagesError.recordNotFound);
+    }
+
+    transactions[index] = updated;
   }
 
   // Future<bool> updateData(String studentJson) async {
