@@ -14,6 +14,8 @@ class TransactionSheet extends StatelessWidget {
   /// e o resultado da execução
   final Command1<void, Failure, TransactionEntity> submitCommand;
 
+  final TransactionEntity? transactionToEdit;
+
   /// Função callback quando a transação é submetida
   // final Function(TransactionEntity newTransaction) onSubmit;
 
@@ -22,6 +24,7 @@ class TransactionSheet extends StatelessWidget {
     required this.type,
     // required this.onSubmit,
     required this.submitCommand,
+    this.transactionToEdit,
   });
 
   /// Método auxiliar para exibir o bottom sheet como um modal
@@ -30,6 +33,7 @@ class TransactionSheet extends StatelessWidget {
     required TransactionType type,
     // required Function(TransactionEntity newTransaction) onSubmit,
     required Command1<void, Failure, TransactionEntity> submitCommand,
+    TransactionEntity? transactionToEdit,
   }) async {
     return showModalBottomSheet(
       context: context,
@@ -40,6 +44,7 @@ class TransactionSheet extends StatelessWidget {
             type: type,
             // onSubmit: onSubmit,
             submitCommand: submitCommand,
+            transactionToEdit: transactionToEdit,
           ),
     );
   }
@@ -51,6 +56,7 @@ class TransactionSheet extends StatelessWidget {
     final isIncome = type == TransactionType.income;
     final color = isIncome ? colorScheme.primary : colorScheme.secondary;
     final formTitle = type.nameSingular; // Retorna 'Receita' ou 'Despesa'
+    final isEdit = transactionToEdit != null;
 
     // Altura disponível para o bottom sheet (75% da altura da tela)
     final availableHeight = MediaQuery.of(context).size.height * 0.75;
@@ -101,7 +107,7 @@ class TransactionSheet extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Adicionar $formTitle',
+                        '${isEdit ? 'Editar' : 'Adicionar'} $formTitle',
                         style: theme.textTheme.titleLarge?.copyWith(
                           color: colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
@@ -126,6 +132,7 @@ class TransactionSheet extends StatelessWidget {
                   type: type,
                   color: color,
                   submitCommand: submitCommand,
+                  transactionToEdit: transactionToEdit,
                   // onSubmit: (newTransaction) {
                   //   onSubmit(newTransaction);
                   //   Navigator.pop(context); // Fecha o bottom sheet

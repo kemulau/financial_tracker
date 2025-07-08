@@ -14,6 +14,8 @@ class TransactionCardSheets extends StatefulWidget {
   final Function(String id)
   onDelete; // Callback para deletar uma transação pelo ID
 
+  final Function(TransactionEntity transaction) onEdit;
+
   final Command1<void, Failure, TransactionEntity>
   undoDelete; // Callback para desfazer exclusão
   final BuildContext
@@ -24,6 +26,7 @@ class TransactionCardSheets extends StatefulWidget {
     required this.incomeTransactions,
     required this.expenseTransactions,
     required this.onDelete,
+    required this.onEdit,
     required this.undoDelete,
     required this.scaffoldContext,
   });
@@ -328,14 +331,23 @@ class _TransactionCardSheetsState extends State<TransactionCardSheets>
                   Formatter.formatDate(transaction.date), // Data formatada
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-                trailing: Text(
-                  Formatter.formatCurrency(
-                    transaction.amount,
-                  ), // Valor formatado em moeda
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: color, // Cor do texto conforme tipo
-                  ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      Formatter.formatCurrency(
+                        transaction.amount,
+                      ),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => widget.onEdit(transaction),
+                    ),
+                  ],
                 ),
               ),
             ),
