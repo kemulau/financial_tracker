@@ -99,8 +99,6 @@ class TransactionFakeServiceImpl implements TransactionStorageContract {
       return Error(RecordNotFound('Na Atualização: ${e.toString()}'));
     } on InvalidData catch (e) {
       return Error(InvalidData('Na Atualização: ${e.toString()}'));
-    } on APIFailure catch (e) {
-      return Error(APIFailure(e.toString()));
     } on Exception catch (e) {
       return Error(DefaultError('Erro ao atualizar: ${e.toString()}'));
     }
