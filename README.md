@@ -15,6 +15,7 @@ Os usuários podem:
 ## 🚀 Funcionalidades Principais
 
 - **Gerenciamento de Transações**: Inserção via formulário modal com ID único, título, valor, data e tipo. Suporta exclusão por deslize com opção de desfazer via Snackbar.
+- **Edição de Transações**: Ao clicar no ícone de lápis, o usuário pode alterar os dados de uma transação existente (valor, descrição, data e tipo) diretamente na interface.
 - **Resumo e Gráficos**: Tela inicial com cartão de resumo (totais e saldo) e gráfico de pizza (proporção receitas/despesas).
 - **Filtro por Data**: Filtros por "hoje", "esta semana", "este mês", "personalizado" e "todos", com chips interativos.
 - **Estado Reativo**: Uso da lib `signals_flutter` para atualização automática da interface.
@@ -39,6 +40,7 @@ Arquitetura em camadas com separação clara entre **UI**, **lógica de negócio
 
 - `TransactionForm`: campos validados
 - Ao submeter, chama comando de salvar via controller e atualiza a UI
+- Também suporta **modo de edição**, preenchendo automaticamente os campos com os dados da transação selecionada.
 
 ### 🧠 Controller
 
